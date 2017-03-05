@@ -30,9 +30,3 @@ Wenn LED an, d.h. GPIO Ausgang auf LOW.
 * Messpunkt B: 2.05 V
 * Strom: 5.18 mA
 
-Schaltplan
-++++++++++
-
-.. raw:: html
-
-	 <object data="LED_Vcc.svg" type="image/svg+xml"></object>
