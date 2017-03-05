@@ -33,7 +33,6 @@ Wenn LED an, d.h. GPIO Ausgang auf LOW.
 Schaltplan
 ++++++++++
 
-.. image:: LED_Vcc.svg
-	   :alt: Schaltplan
-	   :width: 100%
-	   :align: center
+.. raw:: html
+
+	 <object data="LED_Vcc.svg" type="image/svg+xml"></object>
