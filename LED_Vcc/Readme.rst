@@ -9,6 +9,8 @@ ist.
 Messungen
 +++++++++
 
+Bei einem Widerstand von 220 Ohm.
+
 LED aus
 -------
 
