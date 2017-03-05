@@ -14,10 +14,9 @@ LED aus
 
 Wenn LED aus, d.h. GPIO Ausgang auf HIGH.
 
-Messpunkt A: 3.25 V
-Messpunkt B: 3.25 V
-
-Strom: 0.00 mA
+* Messpunkt A: 3.25 V
+* Messpunkt B: 3.25 V
+* Strom: 0.00 mA
 
 
 LED an
@@ -25,7 +24,6 @@ LED an
 
 Wenn LED an, d.h. GPIO Ausgang auf LOW.
 
-Messpunkt A: 0.17 V
-Messpunkt B: 2.05 V
-
-Strom: 5.18 mA
+* Messpunkt A: 0.17 V
+* Messpunkt B: 2.05 V
+* Strom: 5.18 mA
