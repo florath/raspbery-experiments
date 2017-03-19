@@ -1,41 +1,12 @@
-LED gegen Vcc
+LED Messungen
 +++++++++++++
 
-In diesem Versuchsaufbau wird die LED so angesteuert, dass sie
-leuchtet, wenn der GPIO LOW ist. D.h. der Strom fließt von Vcc (sollte
-3.3V) über den Vorwiederstand zur LED die dann mit den GPIO verbunden
-ist.
-
-Messungen
-+++++++++
-
-Bei einem Widerstand von 220 Ohm.
-
-LED aus
--------
-
-Wenn LED aus, d.h. GPIO Ausgang auf HIGH.
-
-* Messpunkt A: 3.25 V
-* Messpunkt B: 3.25 V
-* Strom: 0.00 mA
-
-
-LED an
-------
-
-Wenn LED an, d.h. GPIO Ausgang auf LOW.
-
-* Messpunkt A: 0.17 V
-* Messpunkt B: 2.05 V
-* Strom: 5.18 mA
+In diesem Versuchsaufbau wird die LED zwischen Masse und Vcc
+geschaltet um einige Kenngrößen zu messen.
 
 
 Video Transscript
 -----------------
-
-Video: LED Messen und Planen
-............................
 
 [Schaltplan LED_generic]
 
@@ -80,6 +51,7 @@ B = 1.87 V
 
 I = 5.9 mA
 
+[Kommentar:
 D.h. am Widerstand fallen 3.25V - 1.87V = 1.38V ab,
 und an der LED 1.87V.
 
@@ -87,7 +59,7 @@ Gegenrechnung: nach dem Ohm-schen Gesetz gilt: R = U / I.
 
 U / I sind hier 1.38V / 0.0059 mA = 233 Ohm
 
-Also passen theroretischer Wert und gemessener ziemlich gut überein.
+Also passen theroretischer Wert und gemessener ziemlich gut überein.]
 
 
 Testweise tausche ich nun den Widerstand aus und ersetze ihn durch
@@ -110,18 +82,3 @@ Bei 26 GPIOs und einer (möglichen) Entnahme aller GPIOs von maximal
 Fall auf der sicherern Seite.  Daher werde ich zukünftig bei LED
 Vorwiderständen, die ich mit dem Raspberry Pi ansteuere auf 1kOhm
 zurückgreifen.
-
-======================================================================
-
-
-Also hier: 3.25 V / 0.005 mA = 
-
-Es gibt mehrere Möglichkeiten dies zu machen.  Dieser Versuch wird so
-aufgebaut, dass die LED gegen Vcc geschaltet wird.  Dies heißt, dass
-sie leuchtet, wenn der GPIO Ausgang auf LOW liegt und nicht leuchtet,
-wenn der GPIO Ausgang auf HIGH liegt.
-
-Ich nutze hier wieder das sys-fs.  Die Nutzung wurde im letzten Video
-vorgestellt.
-
-
