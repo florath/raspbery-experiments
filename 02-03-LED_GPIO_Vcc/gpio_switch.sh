@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Switches the given LED on or off
+# Switches the given GPIO (e.g. LED) on or off
 #
 # (C) 2017 Andreas Florath <andreas@florath.net>
 # See COPYING for license.
@@ -29,7 +29,7 @@ while getopts "g:" opt; do
 done
 
 function usage {
-    echo "led_switch.sh -g GPIO_NUM [on|1|off|0]"
+    echo "gpio_switch.sh -g GPIO_NUM [on|1|off|0]"
 }
 
 if test -z "${GPIO_PIN}"; then
@@ -47,15 +47,13 @@ fi
 LEVEL=$1
 
 if test "${LEVEL}" == 'on'; then
-    LEVEL=0
-elif test "${LEVEL}" == 'off'; then
     LEVEL=1
+elif test "${LEVEL}" == 'off'; then
+    LEVEL=0
 fi
 
 . ${BASH_LIB_DIR}/GPIO.sh
 
+GPIO_init ${GPIO_PIN}
 GPIO_set_output ${GPIO_PIN}
 GPIO_set ${GPIO_PIN} ${LEVEL}
-
-
-

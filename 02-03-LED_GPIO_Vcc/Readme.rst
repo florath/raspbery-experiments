@@ -6,122 +6,108 @@ leuchtet, wenn der GPIO LOW ist. D.h. der Strom fließt von Vcc (sollte
 3.3V) über den Vorwiederstand zur LED die dann mit den GPIO verbunden
 ist.
 
-Messungen
-+++++++++
-
-Bei einem Widerstand von 220 Ohm.
-
-LED aus
--------
-
-Wenn LED aus, d.h. GPIO Ausgang auf HIGH.
-
-* Messpunkt A: 3.25 V
-* Messpunkt B: 3.25 V
-* Strom: 0.00 mA
-
-
-LED an
-------
-
-Wenn LED an, d.h. GPIO Ausgang auf LOW.
-
-* Messpunkt A: 0.17 V
-* Messpunkt B: 2.05 V
-* Strom: 5.18 mA
-
-
 Video Transscript
 -----------------
 
-Video: LED Messen und Planen
-............................
+[Schaltplan LED_Vcc]
 
-[Schaltplan LED_generic]
+In diesem Video zeigt ich, wie mit Hilfe eines GPIO Ausgangs eine LED
+angesteuert wird.
 
-In diesem Video zeigt ich, wie eine LED angesteuert wird und auf
-welche Dinge zu achten ist.
+Der Versuchsaufbau ist sehr ähnlich dem aus dem letzten Video: die
+Schaltpläne unterscheiden sich nur an einer Stelle: hier wird
+Masse durch einen GPIO ersetzt.
 
-Der entsprechende Schaltplan ist hier zu sehen.  Bevor es an die GPIOs
-geht, baue ich den Versuch erst einmal 'trocken' auf, d.h. wie hier zu
-sehen zwichen Masse und Vcc.  Im Schaltplan ist ein Messpunkt B
-eingetragen, an dem ich die Spannung messen werde.
+Zur Ansteuerung wird hier das schon vorgestellte sysfs genutzt.
 
-Mir sind keine exakten Spezifikationen bekannt, wie stark ein GPIO Pin
-belastet werden kann.  Unterschiedlichen Quellen ist aber zu
-entnehmen, dass der Stom für einen einzelnen GPIO nicht höher als 15mA
-sein darf.  Weiterhin darf der Gesamtstrom aller GPIO Ausgänge nicht
-mehr als 50mA betragen.
+[Screencast: Editor mit lib/bash/GPIO.sh]
 
-[Video: Zeigen LED]
+Die in einem der letzten Videos vorgestellten Befehle zur Ansteuerung
+der GPIOs mit Hilfe des sysfs habe ich in eine kleine bash-Bibliothek
+ausgelagert.  Das macht das Programmieren einfacher - man kann sich so
+auf das Wesentliche konzentrieren.
 
-Die Anode (der Plus-Pol) ist etwas länger; an der Kathode (Minus-Pol)
-ist die LED abgeflacht.
+Die in diesem Video benötigen Funktionen sind:
 
-Eine 'Standard-' LED darf mit maximal 20mA belastet werden; sie
-leuchtet aber auch schon bei weniger Strom recht hell.
+GPIO_init <pin_num>: Initialisiert einen GPIO
 
-Aus diesen Überlegungen entscheide ich mich hier in diesem Versuch
-erstmal für eine Ziel-Stromstärke von ca. 5mA.  Der daraus
-resultierende Vorwiderstand beträgt 220 Ohm.  Für die Berechnung
-möchte ich hier auf verschiedene Quellen im Internet verweisen.
+GPIO_cleanup <pin_num>: Deinitialisiert einen GPIO und setzt ihn in
+den Ausgangszustand zurück.
 
-Für meinen Versuchsaufbau ist das:
+GPIO_set_output <pin_num>: Schaltet einen GPIO auf Ausgang
 
-[Video: zeigen Messung Widerstand]
+GPIO_set <pin_num> [0|1]: Setzt einen GPIO auf den angegebenen Wert
 
-R = 218 Ohm
+GPIO_set_high <pin_num>: Setzt einen GPIO auf HIGH
 
-[Video: zeigen Messung Spannung]
+GPIO_set_low <pin_num>: Setzt einen GPIO auf LOW
 
-B = 1.87 V
 
-[Video: zeigen Messung Stromstärke]
+[Screencast: Editor mit led_switch.sh]
 
-I = 5.9 mA
+Die Nutzung dieser Funktionen funktioniert so, dass zuerst die Datei
+GPIO.sh eingelesen werden muss, damit die Funktionen zur Verfügung
+stehen.
 
-D.h. am Widerstand fallen 3.25V - 1.87V = 1.38V ab,
-und an der LED 1.87V.
+Eine typische Sequenz: GPIO_init, GPIO_set_output, GPIO_set
+
+Diese Sequenz habe ich in das bash-Skript led_switch.sh hinterlegt, so
+kann mit
+
+* gpio_switch.sh -g 17 off
+  Der GPIO ausgeschaltet (d.h. auf LOW gesetzt) werden
+
+* gpio_switch.sh -g 17 on
+  Der GPIO eingeschaltet (d.h. auf HIGH gesetzt) werden
+
+[Hintergrund: Terminal auf den Raspberry Pi
+ Vordergrund: Versuchsaufbau mit Vcc und Masse
+ Vor-Vordergrund: Schaltplan mit Vcc und Masse]
+
+Dies ist der Versuchsaufbau wie im letzten Video gezeigt: es wird Vcc
+und Masse genutzt.  Als Vorwiderstand kommt 1kOhm zum Einsatz.
+
+[Vor-Vordergrund: Überblenden zum neuen Schaltplan mit GPIO]
+
+Dies ist der Versuchsaufbau für die Ansteuerung mit einem GPIO.
+
+[Screencast: Aufruf von gpio_switch.sh -g 17 on
+[Video: Umstecken Masse auf Pin 17]
+
+Die Leuchtdiode leuchtet nun nicht.  Der Versuchsaufbau ist so
+gewählt, dass die LED leuchtet, wenn der GPIO auf LOW liegt.
+
+Dann werde ich jetzt den GPIO auf LOW schalten...
+
+[Screencast: Aufruf von gpio_switch.sh -g 17 off]
+
+und man sieht, dass die LED nun leuchtet.
+
+[Screencast / Video: einmalige Widerholung von aus und an.]
+
+
+[Video: komplett Versuchsaufbau mit Messinstrument - LED leuchtet]
+
+Abschließend werde ich nun die beiden Messpunkte und den Strom messen:
+
+A = 0.047V
+
+B = 1.847V
+
+I = 1.287mA
+
+bei R = 1kOhm
+
+
+Berechnungen
+------------
 
 Gegenrechnung: nach dem Ohm-schen Gesetz gilt: R = U / I.
 
-U / I sind hier 1.38V / 0.0059 mA = 233 Ohm
+Am Widerstand fällt ab: 1.45V
 
-Also passen theroretischer Wert und gemessener ziemlich gut überein.
+1.45V / 0.001287 mA = 1126 Ohm
 
+Widerstand gemessen: 998 Ohm.
 
-Testweise tausche ich nun den Widerstand aus und ersetze ihn durch
-1kOhm.  Auch hier leuchtet die LED noch erkennbar hell.
-
-[Video: zeigen Messung Widerstand]
-
-R = 998 Ohm
-
-[Video: zeigen Messung Spannung]
-
-B = 1.79 V
-
-I = 1.3 mA
-
-[Video: zeigen Messung Stromstärke]
-
-Bei 26 GPIOs und einer (möglichen) Entnahme aller GPIOs von maximal
-50mA ist man mit 1kOhm Vorwiederstand für derartige Versuche auf jeden
-Fall auf der sicherern Seite.  Daher werde ich zukünftig bei LED
-Vorwiderständen, die ich mit dem Raspberry Pi ansteuere auf 1kOhm
-zurückgreifen.
-
-======================================================================
-
-
-Also hier: 3.25 V / 0.005 mA = 
-
-Es gibt mehrere Möglichkeiten dies zu machen.  Dieser Versuch wird so
-aufgebaut, dass die LED gegen Vcc geschaltet wird.  Dies heißt, dass
-sie leuchtet, wenn der GPIO Ausgang auf LOW liegt und nicht leuchtet,
-wenn der GPIO Ausgang auf HIGH liegt.
-
-Ich nutze hier wieder das sys-fs.  Die Nutzung wurde im letzten Video
-vorgestellt.
-
-
+Recht großer Unterschied. Erklärung?
